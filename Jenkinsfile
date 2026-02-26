@@ -1,7 +1,5 @@
-pipeline {
-    agent any
-    
-    stages {
+node {
+    try {
         stage('Build') {
             steps {
                 sh '''
@@ -15,7 +13,7 @@ pipeline {
                 '''
             }
         }
-        
+
         stage('Test') {
             steps {
                 sh '''
@@ -38,7 +36,7 @@ pipeline {
                 '''
             }
         }
-        
+
         stage('Deploy') {
             steps {
                 sh '''
@@ -50,14 +48,10 @@ pipeline {
                 '''
             }
         }
-    }
-    
-    post {
-        success {
-            echo "Pipeline executed successfully!"
-        }
-        failure {
-            echo "Pipeline failed!"
-        }
+
+        echo "Pipeline executed successfully!"
+    } catch (Exception e) {
+        echo "Pipeline failed!"
+        throw e
     }
 }
